@@ -1,0 +1,15 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="centerstage techfonts">
+    {% for post in post_list %}
+    <div class="post techfonts">
+        <h1><a href="{% url 'post_details' pk=post.pk %}">{{ post.title }}</a></h1>
+        <div class="dates">
+            <p>Published on: {{ post.publish_date|date:'D M Y' }}</p>
+        </div>
+        <a href="{% url 'post_details' pk=post.pk %}">Comments:{{ post.comments.count }}</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

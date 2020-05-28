@@ -1,0 +1,44 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+<h1>{{ post.title }}</h1>
+
+{% if post.publish_date %}
+<div class="date published techfonts">
+        {{ post.publish_date }}
+</div>
+{% else %}
+<a class="btn btn-default techfonts" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+{% endif %}
+<p class="postcontent techfonts">{{post.text|safe|linebreaksbr}}</p>
+{%if user.is_authenticated  %}
+<a class="btn btn-primary techfonts" href="{% url 'post_update' pk=post.pk %}"><span
+                class="glyphicon glyphicon-pencil"></span></a>
+<a class="btn btn-primary techfonts" href="{% url 'post_delete' pk=post.pk %}"><span
+                class="glyphicon glyphicon-remove"></span></a>
+{% endif %}
+
+<hr>
+
+<a class="btn btn-primary btn-comment" href="{% url 'approve_comment_to_post' pk=post.pk %}">Add Comment</a>
+<div class="container techfonts">
+
+        {% for comment in post.comments.all %}
+        <br>
+        {% if user.is_authenticated or comment.approve_comment %}
+        {{ comment.create_date }}
+        {% if not comment.approve_comment %}
+        <a class="btn btn-default" href="{% url 'revove_comment' pk=comment.pk %}"><span
+                        class="glyphicon glyphicon-remove"></span></a>
+        <a class="btn btn-primary" href="{% url 'comment_approve' pk=comment.pk %}"><span
+                        class="glyphicon glyphicon-ok"></span></a>
+
+        {% endif %}
+        <p>{{comment.text|safe|linebreaksbr}}</p>
+        <p>Posted By: {{comment.author}}</p>
+        {% endif %}
+        {% endfor %}
+</div>
+
+{% endblock %}
